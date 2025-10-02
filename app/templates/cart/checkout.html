@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4" data-aos="fade-up">
+        <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent fw-bold">
+            Checkout
+        </span>
+    </h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm mb-4" data-aos="fade-up">
+                <div class="card-body p-4">
+                    <h4 class="mb-4">Billing Information</h4>
+                    <form id="checkout-form" action="{{ url_for('cart.process_payment') }}" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control rounded-pill" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control rounded-pill" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control rounded-pill" value="{{ current_user.email }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control rounded-pill" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control rounded-pill" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ZIP Code</label>
+                                <input type="text" class="form-control rounded-pill" required>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-4 mt-4">Payment Information</h4>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This is a demo. Use test card: 4242 4242 4242 4242
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Card Number</label>
+                            <input type="text" class="form-control rounded-pill" placeholder="1234 5678 9012 3456" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Expiry Date</label>
+                                <input type="text" class="form-control rounded-pill" placeholder="MM/YY" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-control rounded-pill" placeholder="123" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-0 shadow-lg sticky-top" data-aos="fade-left">
+                <div class="card-body p-4">
+                    <h4 class="mb-4">Order Summary</h4>
+                    
+                    {% for item in cart_items %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{{ item.product.name }} x{{ item.quantity }}</span>
+                            <span>${{ "%.2f"|format(item.product.price * item.quantity) }}</span>
+                        </div>
+                    {% endfor %}
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal:</span>
+                        <span>${{ "%.2f"|format(total) }}</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Shipping:</span>
+                        <span class="text-success">Free</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Total:</strong>
+                        <strong class="text-primary">${{ "%.2f"|format(total) }}</strong>
+                    </div>
+                    
+                    <button type="submit" form="checkout-form" 
+                            class="btn btn-primary w-100 rounded-pill py-2 hover-lift">
+                        <i class="fas fa-lock me-2"></i>Place Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

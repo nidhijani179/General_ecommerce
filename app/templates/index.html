@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div class="container text-center" data-aos="fade-up">
+        <h1 class="display-1 fw-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+            Welcome to ModernShop
+        </h1>
+        <p class="lead mb-5 text-gray-600 dark:text-gray-300">
+            Discover amazing products with a modern shopping experience
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{{ url_for('products.index') }}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 hover-lift">
+                Shop Now <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3 hover-lift">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </a>
+            {% else %}
+                <a href="{{ url_for('auth.profile') }}" class="btn btn-success btn-lg rounded-pill px-5 py-3 hover-lift">
+                    <i class="fas fa-user me-2"></i>My Account
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Floating Elements -->
+    <div class="floating-element" style="top: 20%; left: 10%;">
+        <i class="fas fa-shopping-bag text-primary opacity-20" style="font-size: 3rem;"></i>
+    </div>
+    <div class="floating-element" style="top: 60%; right: 15%;">
+        <i class="fas fa-heart text-pink-400 opacity-20" style="font-size: 2rem;"></i>
+    </div>
+</section>
+
+<!-- Trending Products -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5" data-aos="fade-up">
+            <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent fw-bold">
+                Trending Products
+            </span>
+        </h2>
+        
+        <div class="row g-4">
+            {% for product in trending_products %}
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                    <div class="product-card card border-0 shadow-sm h-100 hover-lift">
+                        <div class="position-relative overflow-hidden">
+                            <img src="{{ product.image_url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                            <div class="product-overlay">
+                                <a href="{{ url_for('cart.add', product_id=product.id) }}" 
+                                   class="btn btn-primary rounded-pill">
+                                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text text-muted">{{ product.description[:50] }}...</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="h5 text-primary mb-0">${{ "%.2f"|format(product.price) }}</span>
+                                <div class="rating">
+                                    {% for i in range(5) %}
+                                        <i class="fas fa-star {% if i < product.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                {% if current_user.is_authenticated %}
+                                    <a href="{{ url_for('cart.add', product_id=product.id) }}" class="btn btn-primary rounded-pill">
+                                        <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary rounded-pill">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login to Buy
+                                    </a>
+                                {% endif %}
+                                <a href="{{ url_for('products.detail', id=product.id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">
+                                    <i class="fas fa-eye me-2"></i>View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-5 bg-light dark:bg-gray-800">
+    <div class="container">
+        <h2 class="text-center mb-5" data-aos="fade-up">
+            <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent fw-bold">
+                Shop by Category
+            </span>
+        </h2>
+        
+        <div class="row g-4">
+            {% for category in categories %}
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="{{ loop.index * 100 }}">
+                    <a href="{{ url_for('products.index', category=category.id) }}" 
+                       class="text-decoration-none">
+                        <div class="category-card card border-0 shadow-sm text-center hover-lift">
+                            <div class="card-body py-5">
+                                <i class="fas fa-tag text-primary mb-3" style="font-size: 3rem;"></i>
+                                <h5 class="card-title">{{ category.name }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Quick Access Section -->
+{% if current_user.is_authenticated %}
+<section class="py-5 bg-gradient-to-r from-blue-50 to-purple-50">
+    <div class="container">
+        <h3 class="text-center mb-4" data-aos="fade-up">
+            <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent fw-bold">
+                Quick Access
+            </span>
+        </h3>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-3" data-aos="fade-up">
+                <a href="{{ url_for('cart.index') }}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm text-center hover-lift h-100">
+                        <div class="card-body py-4">
+                            <i class="fas fa-shopping-cart text-primary mb-3" style="font-size: 3rem;"></i>
+                            <h5>My Cart</h5>
+                            <p class="text-muted mb-0">View & manage items</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                <a href="{{ url_for('auth.profile') }}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm text-center hover-lift h-100">
+                        <div class="card-body py-4">
+                            <i class="fas fa-user text-success mb-3" style="font-size: 3rem;"></i>
+                            <h5>My Account</h5>
+                            <p class="text-muted mb-0">Profile & orders</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <a href="{{ url_for('products.index') }}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm text-center hover-lift h-100">
+                        <div class="card-body py-4">
+                            <i class="fas fa-store text-info mb-3" style="font-size: 3rem;"></i>
+                            <h5>All Products</h5>
+                            <p class="text-muted mb-0">Browse catalog</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4 text-center" data-aos="fade-up">
+                <i class="fas fa-shipping-fast text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5>Fast Shipping</h5>
+                <p class="text-muted">Free shipping on orders over $50</p>
+            </div>
+            <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-shield-alt text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5>Secure Payment</h5>
+                <p class="text-muted">Your payment information is safe</p>
+            </div>
+            <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-undo text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5>Easy Returns</h5>
+                <p class="text-muted">30-day return policy</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
