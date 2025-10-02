@@ -1,3 +1,9 @@
+
+<img width="1909" height="870" alt="Screenshot 2025-10-02 220016" src="https://github.com/user-attachments/assets/28818c6e-e40f-4170-b7fc-885dc3805fb1" />
+<img width="1896" height="872" alt="Screenshot 2025-10-02 215954" src="https://github.com/user-attachments/assets/62c5b855-0ed7-4c9c-bdb7-8b523f1f9939" />
+<img width="1883" height="868" alt="Screenshot 2025-10-02 220040" src="https://github.com/user-attachments/assets/55ff0e9a-b272-4bda-8d01-37f395ebc4f0" />
+<img width="1914" height="873" alt="Screenshot 2025-10-02 220027" src="https://github.com/user-attachments/assets/d24a9d16-dbae-43ac-a669-f34401a03fb8" />
+
 # ModernShop - Full-Stack E-commerce Website
 
 A modern, Gen Z-friendly e-commerce website built with Flask, featuring a beautiful UI with animations and secure payment processing.
